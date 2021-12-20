@@ -2,6 +2,8 @@
 #include "../headers/other.h"
 #include "../headers/home_page.h"
 #include "../headers/pause_page.h"
+#include "../headers/launch_page.h"
+#include "../headers/win_page.h"
 #include <math.h>
 
 typedef struct CharLineArray {
@@ -13,6 +15,7 @@ App app;
 SDL_Point positionClick;
 int numberMatrice[7][7];
 int copyNumberMatrice[7][7];
+SDL_Rect numberRectMatrice[7][7];
 struct CharLineArray pathBlocMatrice[6];
 CharLineArray line;
 
@@ -27,7 +30,6 @@ char tempPath[50] = "";
 int pause = 0;
 SDL_Surface *tempImage;
 SDL_Texture *tempTexture;
-SDL_Rect tempRect ;
 
 
 
@@ -133,7 +135,7 @@ void initPathBlocMatrice() {
 */
 void initMatrice() {
     
-    int i,j,k;
+    int i,j;
 
    for(i = 0;i < 7; ++i)
     {
@@ -240,6 +242,7 @@ void createNumbersButtons() {
                 tempRect.h = 76;
                 
                 number = copyNumberMatrice[i][j];
+                numberRectMatrice[i][j] = tempRect;
                 strcpy(path,"");
                 strcat(path,"img/launch/numbers/");
                 strcat(path,"gear-num-");
@@ -338,35 +341,158 @@ void changeBlocPath(int i,int j) {
             pathBlocMatrice[i] = line;
      };
 
-    
+                strcpy(tempPath,"");
+                strcpy(tempPath,diagDirectory);
+                strcat(tempPath,line.line[j]);
+                fprintf(stderr,"%s \n",tempPath);
+                tempRect = rectBlocMatrice[i][j];
 
-    updateRender();
+                tempImage = loadImage(tempPath);
+                if (!tempImage) {
+                    fprintf(stderr,"error in loading the image %s", SDL_GetError());
+                    DestroyWindowAndQuit(app);
+                }
+                tempTexture = SDL_CreateTextureFromSurface(app.renderer, tempImage);
+                SDL_FreeSurface(tempImage);
+                if(NULL == tempTexture)
+                {
+                        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s",
+                                        SDL_GetError());
+                        DestroyWindowAndQuit(app);
+                }
+
+                SDL_RenderCopy(app.renderer,tempTexture,NULL,&tempRect);
+                updateNumbersButtons(i,j);
+                SDL_RenderPresent(app.renderer);
 
 }
 
-void updateRender() {
+void updateNumbersButtons(int i,int j) {
+               
+               
+                tempRect = numberRectMatrice[i][j];
+                int number =  copyNumberMatrice[i][j];
+                strcpy(tempPath,"");
+                strcat(tempPath,"img/launch/numbers/");
+                strcat(tempPath,"gear-num-");
+                char temp[2];
+                sprintf(temp,"%d",number);
+                strcat(tempPath,temp);
+                strcat(tempPath,".bmp");
 
-    SDL_RenderClear(app.renderer);
-    SDL_RenderPresent(app.renderer);
+                tempImage = loadImage(tempPath);
+                if (!tempImage) {
+                    fprintf(stderr,"error in loading the image %s", SDL_GetError());
+                    DestroyWindowAndQuit(app);
+                }
+                tempTexture = SDL_CreateTextureFromSurface(app.renderer, tempImage);
+                SDL_FreeSurface(tempImage);
+                if(NULL == tempTexture)
+                {
+                        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s",
+                                        SDL_GetError());
+                        DestroyWindowAndQuit(app);
+                }
 
-    
-
-    createLaunchBackground();
-    createLaunchButtons();
-    createNumbersButtons();
-    
-    SDL_RenderPresent(app.renderer);
-
-    
-    
+                SDL_RenderCopy(app.renderer,tempTexture,NULL,&tempRect);
 
 
+                tempRect = numberRectMatrice[i+1][j];
+                 number =  copyNumberMatrice[i+1][j];
+                strcpy(tempPath,"");
+                strcat(tempPath,"img/launch/numbers/");
+                strcat(tempPath,"gear-num-");
+                sprintf(temp,"%d",number);
+                strcat(tempPath,temp);
+                strcat(tempPath,".bmp");
 
+                tempImage = loadImage(tempPath);
+                if (!tempImage) {
+                    fprintf(stderr,"error in loading the image %s", SDL_GetError());
+                    DestroyWindowAndQuit(app);
+                }
+                tempTexture = SDL_CreateTextureFromSurface(app.renderer, tempImage);
+                SDL_FreeSurface(tempImage);
+                if(NULL == tempTexture)
+                {
+                        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s",
+                                        SDL_GetError());
+                        DestroyWindowAndQuit(app);
+                }
+
+                SDL_RenderCopy(app.renderer,tempTexture,NULL,&tempRect);
+
+                tempRect = numberRectMatrice[i][j+1];
+                 number =  copyNumberMatrice[i][j+1];
+                strcpy(tempPath,"");
+                strcat(tempPath,"img/launch/numbers/");
+                strcat(tempPath,"gear-num-");
+                sprintf(temp,"%d",number);
+                strcat(tempPath,temp);
+                strcat(tempPath,".bmp");
+
+                tempImage = loadImage(tempPath);
+                if (!tempImage) {
+                    fprintf(stderr,"error in loading the image %s", SDL_GetError());
+                    DestroyWindowAndQuit(app);
+                }
+                tempTexture = SDL_CreateTextureFromSurface(app.renderer, tempImage);
+                SDL_FreeSurface(tempImage);
+                if(NULL == tempTexture)
+                {
+                        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s",
+                                        SDL_GetError());
+                        DestroyWindowAndQuit(app);
+                }
+
+                SDL_RenderCopy(app.renderer,tempTexture,NULL,&tempRect);
+
+                tempRect = numberRectMatrice[i+1][j+1];
+                 number =  copyNumberMatrice[i+1][j+1];
+                strcpy(tempPath,"");
+                strcat(tempPath,"img/launch/numbers/");
+                strcat(tempPath,"gear-num-");
+                sprintf(temp,"%d",number);
+                strcat(tempPath,temp);
+                strcat(tempPath,".bmp");
+
+                tempImage = loadImage(tempPath);
+                if (!tempImage) {
+                    fprintf(stderr,"error in loading the image %s", SDL_GetError());
+                    DestroyWindowAndQuit(app);
+                }
+                tempTexture = SDL_CreateTextureFromSurface(app.renderer, tempImage);
+                SDL_FreeSurface(tempImage);
+                if(NULL == tempTexture)
+                {
+                        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s",
+                                        SDL_GetError());
+                        DestroyWindowAndQuit(app);
+                }
+
+                SDL_RenderCopy(app.renderer,tempTexture,NULL,&tempRect);
+
+
+
+
+}
+
+
+int checkIfWin()
+{
+ int i,j;
+
+ for (i=0;i<7;i++){
+    for (j=0;j<7;j++){
+        if (numberMatrice[i][j] != 0)  return 0;
+    }
+    }
+    return 1;
 }
 
 
 void updateTimer() {
-    fprintf(stderr,"%d \n",time_actual);
+    fprintf(stderr,"%f \n",time_actual);
 }
 
 /*
@@ -408,7 +534,17 @@ void LaunchPageEvent(SDL_Event event) {
                             {
                                 if (SDL_PointInRect(&positionClick,&rectBlocMatrice[i][j]) == 1) {
                                         changeBlocPath(i,j);
-                                        
+
+                                        repeat++;
+                                        if (repeat > 4) {
+                                            repeat = 0;
+                                            DestroyWindow(app); 
+                                            createWinPage(time_actual);
+                                        };    
+                                        if(checkIfWin() == 1) {
+                                            DestroyWindow(app); 
+                                            createWinPage(time_actual);
+                                        };
                                         
                                         break;  
                                 }

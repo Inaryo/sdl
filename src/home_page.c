@@ -3,6 +3,7 @@
 #include "../headers/other.h"
 #include "../headers/name_page.h"
 #include "../headers/launch_page.h"
+#include "../headers/home_page.h"
 
 
 App app;

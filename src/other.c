@@ -16,10 +16,10 @@ void DestroyWindowAndQuit(App app) {
 
 }
 
-App createWindowAndRenderer(char page[50],int *width,int *height ) {
+App createWindowAndRenderer(char page[50],int width,int height ) {
     
     App app;
-    if (width != NULL && height != NULL) {
+    if (width > 0 && height > 0 ) {
         app.window = SDL_CreateWindow("Jeux de Droite",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,width,height,0 );
     } else {
         app.window = SDL_CreateWindow("Jeux de Droite",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,SCREEN_WIDTH,SCREEN_HEIGHT,0 );

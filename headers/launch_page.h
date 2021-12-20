@@ -3,7 +3,7 @@
 
     #include "defs.h"
 
-    void createLaunchPage();
+    App createLaunchPage();
     void LaunchPageEvent(SDL_Event event);
     void createLaunchButtons();
     void initMatrice();
@@ -11,6 +11,9 @@
     void createLaunchBackground();
     void changeBlocPath(int i,int j);
     void createPauseButtons();
-    void initRectBlocMatrice();
+    void initPathBlocMatrice();
+    void createNumbersButtons();
+    void updateRender();
+    void updateNumbersButtons(int i,int j);
 
 #endif

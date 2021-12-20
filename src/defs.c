@@ -1,5 +1,8 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "../headers/defs.h"  
+
 
 SDL_Surface* loadImage(char *path) {
 
@@ -8,7 +11,7 @@ SDL_Surface* loadImage(char *path) {
 	if(!image)
 	{
 		/* image failed to load */
-		printf("IMG_Load: %s\n", IMG_GetError());
+		fprintf(stderr,"IMG_Load: %s\n", SDL_GetError());
 		return image;
     }
 	return image;

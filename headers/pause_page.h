@@ -1,6 +1,7 @@
 #ifndef PAUSE_PAGE_HEADER
     #define PAUSE_PAGE_HEADER
     #include "defs.h"
+    
 
     void createPausePage();
     void createPauseBackground();

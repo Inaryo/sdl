@@ -2,6 +2,7 @@
 #include "../headers/defs.h"
 #include "../headers/other.h"
 #include "../headers/launch_page.h"
+#include "../headers/pause_page.h"
 
 App app;
 SDL_Rect  buttonSaveRect,buttonRetryRect,buttonContinueRect;
@@ -45,7 +46,7 @@ void createPausePageButtons() {
 
         buttonSaveImage = loadImage("img/pause/button_save.bmp");
         if (!buttonSaveImage) {
-            fprintf("error in loading the image %s", SDL_GetError());
+            fprintf(stderr,"error in loading the image %s", SDL_GetError());
             DestroyWindowAndQuit(app);
         }
         buttonRetryTexture = SDL_CreateTextureFromSurface(app.renderer, buttonSaveImage);
@@ -68,7 +69,7 @@ void createPausePageButtons() {
 
         buttonRetryImage = loadImage("img/pause/button_retry.bmp");
         if (!buttonRetryImage) {
-            fprintf("error in loading the image %s", SDL_GetError());
+            fprintf(stderr,"error in loading the image %s", SDL_GetError());
             DestroyWindowAndQuit(app);
         }
         buttonRetryTexture = SDL_CreateTextureFromSurface(app.renderer, buttonRetryImage);
@@ -90,7 +91,7 @@ void createPausePageButtons() {
 
         buttonContinueImage = loadImage("img/pause/button_continue.bmp");
         if (!buttonContinueImage) {
-            fprintf("error in loading the image %s", SDL_GetError());
+            fprintf(stderr,"error in loading the image %s", SDL_GetError());
             DestroyWindowAndQuit(app);
         }
         buttonContinueTexture = SDL_CreateTextureFromSurface(app.renderer, buttonContinueImage);

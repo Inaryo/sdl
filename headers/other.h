@@ -5,6 +5,6 @@
 
         void DestroyWindow(App app);
         void DestroyWindowAndQuit(App app);
-        App createWindowAndRenderer(char page[],int *width,int *height);
+        App createWindowAndRenderer(char page[],int width,int height);
 
 #endif // OTHER_H_INCLUDED

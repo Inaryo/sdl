@@ -2,6 +2,8 @@
 #include "../headers/defs.h"
 #include "../headers/other.h"
 #include "../headers/launch_page.h"
+#include "../headers/name_page.h"
+#include "../headers/home_page.h"
 
 App app;
 char inputText[50] = "Your Name";
@@ -15,7 +17,7 @@ int renderText = 0;
 
 SDL_Color White = {255, 255, 255};
 
-TTF_Font* sans = NULL;
+
 SDL_Surface* surfaceMessage = NULL; 
 SDL_Texture* message;
 SDL_Rect message_rect; 
@@ -25,13 +27,13 @@ void createNamePage() {
     
     app = createWindowAndRenderer("name",SCREEN_WIDTH,SCREEN_HEIGHT);
 
-    sans = TTF_OpenFont("fonts/Sans.ttf", 14);
+    /*sans = TTF_OpenFont("fonts/Sans.ttf", 14);
     if (sans == NULL) {
         
     };
     surfaceMessage = TTF_RenderText_Solid(sans, &inputText, White);
 
-    message = SDL_CreateTextureFromSurface(app.renderer, surfaceMessage);
+    message = SDL_CreateTextureFromSurface(app.renderer, surfaceMessage);*/
     //create a rect
     message_rect.x = 0;  //controls the rect's x coordinate 
     message_rect.y = 0; // controls the rect's y coordinte
@@ -54,7 +56,7 @@ void createNameButtons() {
 
         buttonLaunchImage = loadImage("img/home/button_play.bmp");
         if (!buttonLaunchImage) {
-            fprintf("error in loading the image %s", SDL_GetError());
+            fprintf(stderr,"error in loading the image %s", SDL_GetError());
             DestroyWindowAndQuit(app);
         }
         buttonLaunchTexture = SDL_CreateTextureFromSurface(app.renderer, buttonLaunchImage);
@@ -77,7 +79,7 @@ void createNameButtons() {
 
         buttonBackImage = loadImage("img/home/button_play.bmp");
         if (!buttonBackImage) {
-            fprintf("error in loading the image %s", SDL_GetError());
+            fprintf(stderr,"error in loading the image %s", SDL_GetError());
             DestroyWindowAndQuit(app);
         }
         buttonLaunchTexture = SDL_CreateTextureFromSurface(app.renderer, buttonBackImage);
@@ -111,7 +113,7 @@ void NamePageEvent(SDL_Event event) {
                         //Handle copy
                         else if( event.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL )
                         {
-                            SDL_SetClipboardText( &inputText );
+                            SDL_SetClipboardText( inputText );
                         };
                         
     break;
@@ -155,7 +157,7 @@ void NamePageEvent(SDL_Event event) {
 
     if (renderText == 1) {
             
-            SDL_DestroyTexture(message);
+            /*SDL_DestroyTexture(message);
             SDL_RenderClear(app.renderer);
             createNameButtons();
             surfaceMessage = TTF_RenderText_Solid(sans, &inputText, White);
@@ -163,7 +165,7 @@ void NamePageEvent(SDL_Event event) {
 
             message = SDL_CreateTextureFromSurface(app.renderer, surfaceMessage);
             SDL_RenderCopy(app.renderer, message, NULL, &message_rect);
-            SDL_RenderPresent(app.renderer);
+            SDL_RenderPresent(app.renderer);*/
 
     }
     }
