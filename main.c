@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "headers/home_page.h"
 #include "headers/other.h"
 #include "headers/launch_page.h"
@@ -36,7 +37,7 @@ int main(int argc, char *argv[]) {
         DestroyWindowAndQuit(currentApp);
     };
     
-
+    TTF_Init();
     createHomePage();
 
 

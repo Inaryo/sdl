@@ -25,6 +25,7 @@ SDL_Surface *pauseButtonSurface,*homeButtonSurface;
 SDL_Rect rectBlocMatrice[6][6];
 Uint32 time_launched = 0;
 float time_actual = 0;
+float time_begin = 0;
 float time_precedent = 0; 
 char tempPath[50] = "";
 int pause = 0;
@@ -50,7 +51,7 @@ App createLaunchPage() {
     createNumbersButtons();
     createPauseButtons();
 
-
+    time_begin = SDL_GetTicks() / 1000;
     SDL_RenderPresent(app.renderer);
     return app;
 }
@@ -506,8 +507,9 @@ void LaunchPageEvent(SDL_Event event) {
             if (pause == 0) {
 
                 time_actual = (SDL_GetTicks() / 1000);
+                time_actual = time_actual - time_begin;
                 time_actual = roundf(time_actual);
-
+                
                 if (time_actual > time_precedent) {
                     
                     updateTimer(time_actual);
@@ -539,11 +541,13 @@ void LaunchPageEvent(SDL_Event event) {
                                         if (repeat > 4) {
                                             repeat = 0;
                                             DestroyWindow(app); 
-                                            createWinPage(time_actual);
+                                            createWinPage(time_actual,"ramzi");
+                                            time_actual = 0;
                                         };    
                                         if(checkIfWin() == 1) {
                                             DestroyWindow(app); 
-                                            createWinPage(time_actual);
+                                            createWinPage(time_actual,"ramzi");
+                                            time_actual = 0;
                                         };
                                         
                                         break;  

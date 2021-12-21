@@ -1,7 +1,7 @@
 {
     "files.associations": {
         "defs.h": "c",
-        "sdl_ttf.h": "c",
+        "SDL_ttf.h": "c",
         "home_page.h": "c",
         "other.h": "c",
         "launch_page.h": "c"
