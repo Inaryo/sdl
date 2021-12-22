@@ -140,7 +140,7 @@ void NamePageEvent(SDL_Event event) {
                 if (SDL_PointInRect(&positionClick,&buttonLaunchRect) == 1) {
                     
                     SDL_DestroyWindow(app.window);
-                    createLaunchPage();
+                    createLaunchPage(0);
 
                 } else if (SDL_PointInRect(&positionClick,&buttonBackRect) == 1) {
                     SDL_DestroyWindow(app.window);

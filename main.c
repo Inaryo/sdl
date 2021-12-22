@@ -7,6 +7,7 @@
 #include "headers/launch_page.h"
 #include "headers/name_page.h"
 #include "headers/win_page.h"
+#include "headers/pause_page.h"
 
      SDL_Texture *texture;
      SDL_Event event;
@@ -52,6 +53,7 @@ int main(int argc, char *argv[]) {
         NamePageEvent(event);
         LaunchPageEvent(event);
         WinPageEvents(event);
+        PausePageEvents(event);
         
     }
 

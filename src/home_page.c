@@ -162,9 +162,9 @@ void HomePageEvent(SDL_Event event) {
                         
                         if (SDL_PointInRect(&positionClick,&buttonPlayRect) == 1) {
                             DestroyWindow(app);
-                            createLaunchPage();
+                            createLaunchPage(0);
                         } else if (SDL_PointInRect(&positionClick,&buttonAutoPlayRect) == 1) {
-                            
+                            DestroyWindow(app);
                         } else if (SDL_PointInRect(&positionClick,&buttonScoresRect) == 1) {
 
                         } else if (SDL_PointInRect(&positionClick,&buttonExitRect) == 1) {

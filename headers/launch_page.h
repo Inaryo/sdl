@@ -3,18 +3,9 @@
 
     #include "defs.h"
 
-    typedef struct CharLineArray {
-                char line[6][25];
-        } CharLineArray;
+    
 
-    typedef struct SaveGame {
-                char playerName[50];
-                int actual_time;
-                int numberArray[7][7];
-                struct CharLineArray pathBlocMatrice[6];
-        } SaveGame;
-
-    App createLaunchPage();
+    App createLaunchPage(int retry);
     void LaunchPageEvent(SDL_Event event);
     void createLaunchButtons();
     void initMatrice();

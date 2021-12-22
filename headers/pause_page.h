@@ -3,8 +3,8 @@
     #include "defs.h"
     
 
-    void createPausePage();
-    void createPauseBackground();
+    void createPausePage(struct SaveGame game);
+    void createPausePageBackground();
     void createPausePageButtons();
     void PausePageEvents(SDL_Event event);
     

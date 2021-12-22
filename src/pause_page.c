@@ -4,39 +4,46 @@
 #include "../headers/launch_page.h"
 #include "../headers/pause_page.h"
 
+
 App app;
-App launchApp;
+struct SaveGame game;
 SDL_Rect  buttonSaveRect,buttonRetryRect,buttonContinueRect;
 SDL_Point positionClick;
 SDL_Surface *buttonSaveImage, *buttonRetryImage,*buttonContinueImage;
 SDL_Texture *buttonRetryTexture, *buttonSaveTexture,*buttonContinueTexture;
 SDL_Event event;
 
-int is_play_paused;
+int play_retry;
 
 
 
-
-void createPausePage(App launch) {
-
-    launchApp = launch;
+void createPausePage(struct SaveGame save) {
+    game = save;
     app = createWindowAndRenderer("pause",1920,1080);
 
-    createPauseBackground();
-    createPauseButtons();
+    createPausePageBackground();
+    createPausePageButtons();
 
 
 
     SDL_RenderPresent(app.renderer);
-
-    while (1) {
-        SDL_WaitEvent(&event);
-        PausePageEvents(event);
-    }
-    
-
 }
 
+
+int saveGame() {
+                
+                FILE* file = fopen(savingFilePath , "wb+");
+                if (!file) return 0;
+
+                if( (fwrite (&game, sizeof(struct SaveGame), 1, file)) != 0)
+                    fprintf(stderr,"Play saved successfully !\n");
+                else
+                    fprintf(stderr,"error writing file !\n");
+            
+                fclose (file); 
+                return 1; 
+
+}
 void createPausePageButtons() {
 
         // Create the Button of Save
@@ -109,7 +116,7 @@ void createPausePageButtons() {
 
 
 
-void createPauseBackground() {
+void createPausePageBackground() {
 
     SDL_Surface *backgroundImage;
     SDL_Texture *backgroundTexture;
@@ -160,23 +167,26 @@ void PausePageEvents(SDL_Event event) {
                         positionClick.y = event.button.y;
                         
                         if (SDL_PointInRect(&positionClick,&buttonSaveRect)) {
+                                if(saveGame() == 1) {
+                                        play_retry = 0;  
+                                        DestroyWindow(app);
+                                        createLaunchPage(0);
+                                }
                                 
-                                play_saving = 1;
-                                is_play_paused = 0;
-                                SDL_Delay(500);
-                                DestroyWindow(app);
                         
                         } else if (SDL_PointInRect(&positionClick,&buttonRetryRect)) {
                             
-                            is_play_paused = 0;
-                            DestroyWindow(launchApp);
+                            play_retry = 1;    
                             DestroyWindow(app);
-                            createLaunchPage();
+                            createLaunchPage(1);
                             
                         } else if (SDL_PointInRect(&positionClick,&buttonContinueRect)) {
                             
-                            is_play_paused = 0;
-                            DestroyWindow(app);
+                            if(saveGame() == 1) {
+                                        play_retry = 0;  
+                                        DestroyWindow(app);
+                                        createLaunchPage(0);
+                                }
                         };
                         
                         

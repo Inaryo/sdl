@@ -29,7 +29,7 @@ char tempPath[50] = "";
 int is_play_paused = 0;
 SDL_Surface *tempImage;
 SDL_Texture *tempTexture;
-play_saving = 0;
+
 char playerName[50] = "ramzi";
 
 
@@ -39,7 +39,19 @@ char playerName[50] = "ramzi";
 char diagDirectory[] = "img/launch/diag/";
 
 
-App createLaunchPage() {
+App createLaunchPage(int retry) {
+
+        int state = 0;
+        if (retry == 0) {
+                state = getSave();
+        }
+
+        if (state == 0 ) {
+            initPathBlocMatrice();
+            initMatrice();
+        }
+        
+       
 
     app = createWindowAndRenderer("launch",SCREEN_WIDTH,SCREEN_HEIGHT);
     time_launched = SDL_GetTicks() * 1000;
@@ -47,12 +59,7 @@ App createLaunchPage() {
 
 
     initRectBlocMatrice();
-    if (getSave() == 0) {
-        
-        initPathBlocMatrice();
-        initMatrice();
-        
-    }
+    
 
     
     
@@ -69,17 +76,18 @@ int getSave() {
 
                 struct SaveGame save;
                 FILE* file = fopen(savingFilePath , "rb+");
-
+                fprintf(stderr,"path du file: %s",savingFilePath);
                 if (file) {
                     
                     fread(&save, sizeof(struct SaveGame), 1, file);
                     time_actual = save.actual_time;
-
+                    fprintf(stderr,"time actual: %d",time_actual);
                     for (int i = 0; i < 7; i++)
                     {
                         for (int j = 0; j < 7; j++)
                         {
-                            copyNumberMatrice[i][j] = save.numberArray[i][j] ;
+                            numberMatrice[i][j]     = save.numberArray[i][j] ;
+                            copyNumberMatrice[i][j] = save.copyNumberArray[i][j];
                         }
                         
                     }
@@ -92,9 +100,10 @@ int getSave() {
                     }
                     
                     strcpy(playerName,save.playerName);
-
+                    fprintf(stderr,"kayen");
                     return 1;
                 } else {
+                    fprintf(stderr,"makach");
                     return 0;
                 }
                 
@@ -184,6 +193,8 @@ void initPathBlocMatrice() {
 *   Initiating the Function responsible for The Number Matrice 
 */
 void initMatrice() {
+
+    play_retry = 0;
     
     int i,j;
 
@@ -219,9 +230,6 @@ void initMatrice() {
 
             }
         }
-         
-
-       
 }
 
 
@@ -368,24 +376,24 @@ void changeBlocPath(int i,int j) {
       
      
      if (strcmp(line.line[j],"no_diag.bmp") == 0) {
-            numberMatrice[i][j+1]++;
-            numberMatrice[i+1][j]++;
+            numberMatrice[i][j+1]--;
+            numberMatrice[i+1][j]--;
 
             strcpy(line.line[j],"diag_top_right.bmp");
             pathBlocMatrice[i] = line;
      } else if (strcmp(line.line[j],"diag_top_right.bmp") == 0) {
-            numberMatrice[i][j+1]--;
-            numberMatrice[i+1][j]--;
-            numberMatrice[i][j]++;
-            numberMatrice[i+1][j+1]++;
+            numberMatrice[i][j+1]++;
+            numberMatrice[i+1][j]++;
+            numberMatrice[i][j]--;
+            numberMatrice[i+1][j+1]--;
 
             strcpy(line.line[j],"diag_top_left.bmp");
             pathBlocMatrice[i] = line;
 
      } else if (strcmp(line.line[j],"diag_top_left.bmp") == 0) {
 
-            numberMatrice[i][j]--;
-            numberMatrice[i+1][j+1]--;
+            numberMatrice[i][j]++;
+            numberMatrice[i+1][j+1]++;
 
             strcpy(line.line[j],"no_diag.bmp");
             pathBlocMatrice[i] = line;
@@ -530,32 +538,35 @@ void updateNumbersButtons(int i,int j) {
 
 int checkIfWin()
 {
- int i,j;
-
- for (i=0;i<7;i++){
-    for (j=0;j<7;j++){
-        if (numberMatrice[i][j] != 0)  return 0;
+    int i=0;
+    int j=0;
+    
+    for ( i = 0; i < 7; i++)
+    {
+            for (j = 0; j< 7; j++)
+            {
+                if (numberMatrice[i][j] > 0)  {
+                    return 0;
+                break;
+                };
+            }
     }
-    }
+    
     return 1;
+ 
 }
 
 
 void updateTimer() {
-    fprintf(stderr,"%f \n",time_actual);
+    //fprintf(stderr,"%f \n",time_actual);
 }
-
-
-
-
-
-
 
 
 /*
 *   The Function responsible for the Game Events
 */ 
 void LaunchPageEvent(SDL_Event event) {
+
 
 
     if (strcmp(app.page,"launch") == 0) {
@@ -574,39 +585,6 @@ void LaunchPageEvent(SDL_Event event) {
                 
             }
 
-            if (play_saving) {
-                struct SaveGame save;
-
-                save.actual_time     = time_actual;
-
-                for (int i = 0; i < 7; i++)
-                {
-                    for (int j = 0; j < 7; j++)
-                    {
-                        save.numberArray[i][j] = copyNumberMatrice[i][j];
-                    }
-                    
-                }
-
-                for (int i = 0; i < 6; i++)
-                {
-                    
-                        save.pathBlocMatrice[i]= pathBlocMatrice[i];
-                    
-                }
-
-                strcpy(save.playerName,playerName);
-
-                FILE* file = fopen(savingFilePath , "wb+");
-                
-                
-                if( (fwrite (&save, sizeof(struct SaveGame), 1, file)) != 0)
-                    fprintf(stderr,"Play saved successfully !\n");
-                else
-                    fprintf(stderr,"error writing file !\n");
-            
-                fclose (file);
-            }
             
             
 
@@ -628,7 +606,7 @@ void LaunchPageEvent(SDL_Event event) {
                                         changeBlocPath(i,j);
 
                                             
-                                        if(checkIfWin() == 1) {
+                                        if( checkIfWin() == 1) {
                                             DestroyWindow(app); 
                                             createWinPage(time_actual,"ramzi");
                                             time_actual = 0;
@@ -641,8 +619,31 @@ void LaunchPageEvent(SDL_Event event) {
                         }
 
                         if (SDL_PointInRect(&positionClick,&pauseButtonRect)) {
-                            is_play_paused = 1;
-                            createPausePage();
+
+                            struct SaveGame save;
+
+                            save.actual_time     = time_actual;
+
+                            for (int i = 0; i < 7; i++)
+                            {
+                                for (int j = 0; j < 7; j++)
+                                {
+                                    save.numberArray[i][j] = numberMatrice[i][j];
+                                    save.copyNumberArray[i][j] = copyNumberMatrice[i][j];
+                                }
+                                
+                            }
+
+                            for (int i = 0; i < 6; i++)
+                            {
+                                
+                                    save.pathBlocMatrice[i]= pathBlocMatrice[i];
+                                
+                            }
+                            strcpy(save.playerName,playerName);
+                            DestroyWindow(app);
+                            createPausePage(save);
+                            
                         } else if (SDL_PointInRect(&positionClick,&homeButtonRect)) {
                             DestroyWindow(app);
                             createHomePage();
