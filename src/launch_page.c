@@ -45,9 +45,16 @@ App createLaunchPage() {
     time_launched = SDL_GetTicks() * 1000;
     createLaunchBackground();
 
-    initPathBlocMatrice();
-    initMatrice();
+
     initRectBlocMatrice();
+    if (getSave() == 0) {
+        
+        initPathBlocMatrice();
+        initMatrice();
+        
+    }
+
+    
     
     createLaunchButtons();
     createNumbersButtons();
@@ -56,6 +63,35 @@ App createLaunchPage() {
     time_begin = SDL_GetTicks() / 1000;
     SDL_RenderPresent(app.renderer);
     return app;
+}
+
+int getSave() {
+                struct SaveGame save;
+                     time_actual = save.actual_time;
+
+                for (int i = 0; i < 7; i++)
+                {
+                    for (int j = 0; j < 7; j++)
+                    {
+                         copyNumberMatrice[i][j] = save.numberArray[i][j] ;
+                    }
+                    
+                }
+
+                for (int i = 0; i < 6; i++)
+                {
+                    
+                        pathBlocMatrice[i] = save.pathBlocMatrice[i];
+                    
+                }
+                
+                strcpy(playerName,save.playerName);
+
+                
+                save.actual_time     = time_actual;
+                strcpy(save.numberArray,copyNumberMatrice);
+                strcpy(save.pathBlocMatrice,pathBlocMatrice);
+                strcpy(save.playerName,playerName);
 }
 
 void createLaunchButtons() {
@@ -500,6 +536,11 @@ void updateTimer() {
 
 
 
+
+
+
+
+
 /*
 *   The Function responsible for the Game Events
 */ 
@@ -524,10 +565,26 @@ void LaunchPageEvent(SDL_Event event) {
 
             if (play_saving) {
                 struct SaveGame save;
-                save.actual_time = time_actual;
-                save.numberArray = copyNumberMatrice;
-                save.pathBlocMatrice = pathBlocMatrice;
-                save.playerName = playerName;
+
+                save.actual_time     = time_actual;
+
+                for (int i = 0; i < 7; i++)
+                {
+                    for (int j = 0; j < 7; j++)
+                    {
+                        save.numberArray[i][j] = copyNumberMatrice[i][j];
+                    }
+                    
+                }
+
+                for (int i = 0; i < 6; i++)
+                {
+                    
+                        save.pathBlocMatrice[i]= pathBlocMatrice[i];
+                    
+                }
+
+                strcpy(save.playerName,playerName);
 
                 FILE* file = fopen(savingFilePath , "wb+");
                 

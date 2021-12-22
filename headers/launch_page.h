@@ -27,4 +27,5 @@
     void updateRender();
     void updateNumbersButtons(int i,int j);
 
+    int getSave();
 #endif
