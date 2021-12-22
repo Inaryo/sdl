@@ -13,7 +13,7 @@
 
         extern int is_play_paused;
         extern int play_saving;
-        extern char savingFilePath;
+        extern char savingFilePath[50];
 
         #include <time.h>                
         #include <stdlib.h>

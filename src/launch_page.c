@@ -66,32 +66,43 @@ App createLaunchPage() {
 }
 
 int getSave() {
-                struct SaveGame save;
-                     time_actual = save.actual_time;
 
-                for (int i = 0; i < 7; i++)
-                {
-                    for (int j = 0; j < 7; j++)
+                struct SaveGame save;
+                FILE* file = fopen(savingFilePath , "rb+");
+
+                if (file) {
+                    
+                    fread(&save, sizeof(struct SaveGame), 1, file);
+                    time_actual = save.actual_time;
+
+                    for (int i = 0; i < 7; i++)
                     {
-                         copyNumberMatrice[i][j] = save.numberArray[i][j] ;
+                        for (int j = 0; j < 7; j++)
+                        {
+                            copyNumberMatrice[i][j] = save.numberArray[i][j] ;
+                        }
+                        
+                    }
+
+                    for (int i = 0; i < 6; i++)
+                    {
+                        
+                            pathBlocMatrice[i] = save.pathBlocMatrice[i];
+                        
                     }
                     
-                }
+                    strcpy(playerName,save.playerName);
 
-                for (int i = 0; i < 6; i++)
-                {
-                    
-                        pathBlocMatrice[i] = save.pathBlocMatrice[i];
-                    
+                    return 1;
+                } else {
+                    return 0;
                 }
                 
-                strcpy(playerName,save.playerName);
+                
+                
 
                 
-                save.actual_time     = time_actual;
-                strcpy(save.numberArray,copyNumberMatrice);
-                strcpy(save.pathBlocMatrice,pathBlocMatrice);
-                strcpy(save.playerName,playerName);
+                
 }
 
 void createLaunchButtons() {
