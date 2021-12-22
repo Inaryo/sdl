@@ -11,6 +11,10 @@
         #define BUTTONS_BLOC_WIDTH 135
         #define BUTTONS_BLOC_HEIGHT 135
 
+        extern int is_play_paused;
+        extern int play_saving;
+        extern char savingFilePath;
+
         #include <time.h>                
         #include <stdlib.h>
         #include <stdio.h>        

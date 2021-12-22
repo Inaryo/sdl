@@ -28,9 +28,13 @@ float time_actual = 0;
 float time_begin = 0;
 float time_precedent = 0; 
 char tempPath[50] = "";
-int pause = 0;
+int is_play_paused = 0;
 SDL_Surface *tempImage;
 SDL_Texture *tempTexture;
+play_saving = 0;
+
+
+
 
 
 
@@ -504,7 +508,7 @@ void LaunchPageEvent(SDL_Event event) {
 
     if (strcmp(app.page,"launch") == 0) {
 
-            if (pause == 0) {
+            if (is_play_paused == 0) {
 
                 time_actual = (SDL_GetTicks() / 1000);
                 time_actual = time_actual - time_begin;
@@ -516,6 +520,19 @@ void LaunchPageEvent(SDL_Event event) {
                     time_precedent = time_actual;
                 }
                 
+            }
+
+            if (play_saving) {
+                FILE* file = fopen(savingFilePath , "ab+");
+                
+                
+                if( (fwrite (&player, sizeof(struct ScoreBoard), 1, file)) != 0)
+                    fprintf(stderr,"contents to file written successfully !\n");
+                else
+                    fprintf(stderr,"error writing file !\n");
+            
+                // close file
+                fclose (file);
             }
             
             
@@ -557,7 +574,7 @@ void LaunchPageEvent(SDL_Event event) {
                         }
 
                         if (SDL_PointInRect(&positionClick,&pauseButtonRect)) {
-                            pause = 1;
+                            is_play_paused = 1;
                             createPausePage();
                         } else if (SDL_PointInRect(&positionClick,&homeButtonRect)) {
                             DestroyWindow(app);

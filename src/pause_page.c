@@ -5,20 +5,21 @@
 #include "../headers/pause_page.h"
 
 App app;
+App launchApp;
 SDL_Rect  buttonSaveRect,buttonRetryRect,buttonContinueRect;
 SDL_Point positionClick;
 SDL_Surface *buttonSaveImage, *buttonRetryImage,*buttonContinueImage;
-SDL_Texture *buttonRetryTexture, *buttonBackTexture,*buttonContinueTexture;
+SDL_Texture *buttonRetryTexture, *buttonSaveTexture,*buttonContinueTexture;
 SDL_Event event;
 
+int is_play_paused;
 
 
 
 
+void createPausePage(App launch) {
 
-void createPausePage() {
-
-    
+    launchApp = launch;
     app = createWindowAndRenderer("pause",1920,1080);
 
     createPauseBackground();
@@ -30,7 +31,7 @@ void createPausePage() {
 
     while (1) {
         SDL_WaitEvent(&event);
-       // PausePageEvents(event);
+        PausePageEvents(event);
     }
     
 
@@ -49,15 +50,15 @@ void createPausePageButtons() {
             fprintf(stderr,"error in loading the image %s", SDL_GetError());
             DestroyWindowAndQuit(app);
         }
-        buttonRetryTexture = SDL_CreateTextureFromSurface(app.renderer, buttonSaveImage);
+        buttonSaveTexture = SDL_CreateTextureFromSurface(app.renderer, buttonSaveImage);
         SDL_FreeSurface(buttonSaveImage);
-        if(NULL == buttonRetryTexture)
+        if(NULL == buttonSaveTexture)
         {
                 fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s",
                                 SDL_GetError());
                 DestroyWindowAndQuit(app);
         }
-        SDL_RenderCopy(app.renderer,buttonRetryTexture,NULL,&buttonSaveRect);
+        SDL_RenderCopy(app.renderer,buttonSaveTexture,NULL,&buttonSaveRect);
         
 
 
@@ -125,6 +126,7 @@ void createPauseBackground() {
             fprintf(stderr,"error in loading the image %s", SDL_GetError());
             DestroyWindowAndQuit(app);
         }
+
         backgroundTexture = SDL_CreateTextureFromSurface(app.renderer, backgroundImage);
         SDL_FreeSurface(backgroundImage);
         if(NULL == backgroundTexture)
@@ -150,33 +152,32 @@ void PausePageEvents(SDL_Event event) {
             break;
             case SDL_MOUSEBUTTONDOWN: 
             
-                   /* if (event.button.button == SDL_BUTTON_LEFT) {
+                   if (event.button.button == SDL_BUTTON_LEFT) {
                         
                         positionClick.x = event.button.x;
                         positionClick.y = event.button.y;
                         
-                        for (int i = 0; i < 6; i++)
-                        {
-                            for (int j = 0; j < 6; j++)
-                            {
-                                if (SDL_PointInRect(&positionClick,&rectBlocMatrice[i][j]) == 1) {
-                                        fprintf(stderr,"in");
-                                        changeBlocPath(i,j);
-                                        break;  
-                                }
-                            }
-                            
-                        }
-
-                        if (SDL_PointInRect(&positionClick,&pauseButtonRect)) {
-                            createPausePage();
-                        } else if (SDL_PointInRect(&positionClick,&homeButtonRect)) {
+                        if (SDL_PointInRect(&positionClick,&buttonSaveRect)) {
+                                
+                                play_saving = 1;
+                                is_play_paused = 0;
+                                SDL_Delay(500);
+                                DestroyWindow(app);
+                        } else if (SDL_PointInRect(&positionClick,&buttonRetryRect)) {
+                            is_play_paused = 0;
+                            DestroyWindow(launchApp);
                             DestroyWindow(app);
-                            createHomePage();
+                            
+                            createLaunchPage();
+                            
+                        } else if (SDL_PointInRect(&positionClick,&buttonContinueRect)) {
+                            
+                            is_play_paused = 0;
+                            DestroyWindow(app);
                         };
                         
                         
-                    }*/
+                    }
                     break;
             }
     }

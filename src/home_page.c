@@ -11,6 +11,7 @@ SDL_Rect  buttonPlayRect,buttonAutoPlayRect,buttonScoresRect,buttonExitRect;
 SDL_Point positionClick;
 SDL_Surface *buttonPlayImage, *buttonAutoPlayImage, *buttonScoresImage,*buttonExitImage;
 SDL_Texture *buttonPlayTexture, *buttonAutoPlayTexture, *buttonScoresTexture,*buttonExitTexture;
+savingFilePath = "saved.dat";
 
 App createHomePage() {
 
