@@ -140,6 +140,8 @@ void createPauseBackground() {
 }
 
 
+
+
 void PausePageEvents(SDL_Event event) {
 
 
@@ -163,11 +165,12 @@ void PausePageEvents(SDL_Event event) {
                                 is_play_paused = 0;
                                 SDL_Delay(500);
                                 DestroyWindow(app);
+                        
                         } else if (SDL_PointInRect(&positionClick,&buttonRetryRect)) {
+                            
                             is_play_paused = 0;
                             DestroyWindow(launchApp);
                             DestroyWindow(app);
-                            
                             createLaunchPage();
                             
                         } else if (SDL_PointInRect(&positionClick,&buttonContinueRect)) {

@@ -6,9 +6,7 @@
 #include "../headers/win_page.h"
 #include <math.h>
 
-typedef struct CharLineArray {
-                char line[6][25];
-        } CharLineArray;
+
 
 int repeat = 0;
 App app;
@@ -32,7 +30,7 @@ int is_play_paused = 0;
 SDL_Surface *tempImage;
 SDL_Texture *tempTexture;
 play_saving = 0;
-
+char playerName[50] = "ramzi";
 
 
 
@@ -500,6 +498,8 @@ void updateTimer() {
     fprintf(stderr,"%f \n",time_actual);
 }
 
+
+
 /*
 *   The Function responsible for the Game Events
 */ 
@@ -523,15 +523,20 @@ void LaunchPageEvent(SDL_Event event) {
             }
 
             if (play_saving) {
-                FILE* file = fopen(savingFilePath , "ab+");
+                struct SaveGame save;
+                save.actual_time = time_actual;
+                save.numberArray = copyNumberMatrice;
+                save.pathBlocMatrice = pathBlocMatrice;
+                save.playerName = playerName;
+
+                FILE* file = fopen(savingFilePath , "wb+");
                 
                 
-                if( (fwrite (&player, sizeof(struct ScoreBoard), 1, file)) != 0)
-                    fprintf(stderr,"contents to file written successfully !\n");
+                if( (fwrite (&save, sizeof(struct SaveGame), 1, file)) != 0)
+                    fprintf(stderr,"Play saved successfully !\n");
                 else
                     fprintf(stderr,"error writing file !\n");
             
-                // close file
                 fclose (file);
             }
             
@@ -554,13 +559,7 @@ void LaunchPageEvent(SDL_Event event) {
                                 if (SDL_PointInRect(&positionClick,&rectBlocMatrice[i][j]) == 1) {
                                         changeBlocPath(i,j);
 
-                                        repeat++;
-                                        if (repeat > 4) {
-                                            repeat = 0;
-                                            DestroyWindow(app); 
-                                            createWinPage(time_actual,"ramzi");
-                                            time_actual = 0;
-                                        };    
+                                            
                                         if(checkIfWin() == 1) {
                                             DestroyWindow(app); 
                                             createWinPage(time_actual,"ramzi");
